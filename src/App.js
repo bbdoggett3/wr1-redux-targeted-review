@@ -3,9 +3,22 @@ import './App.css';
 import Login from './components/Login'
 import Album from './components/Album'
 import {Link, Switch, Route} from 'react-router-dom';
+import { connect } from 'react-redux';
+import { logoutUser, getUser } from './ducks/authReducer';
+import axios from 'axios'
+
 
 class App extends React.Component {
 
+  componentDidMount() {
+    this.props.getUser();
+  }
+
+  logout = () => {  
+    axios.delete('/auth/logout').then(() => {
+      this.props.logoutUser()
+    })
+  }
 
   render(){
     return (
@@ -17,7 +30,9 @@ class App extends React.Component {
         </Switch>
       <Link to='/'>
       <button 
-        className='logout-button'>
+        className='logout-button'
+        onClick= {() => this.logout()}
+        >
         Logout
       </button>
       </Link>
@@ -26,4 +41,6 @@ class App extends React.Component {
   }
 }
 
-export default App;
+const mapStateToProps = reduxState => reduxState
+
+export default connect(mapStateToProps, {logoutUser, getUser})(App);
