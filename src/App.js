@@ -28,14 +28,19 @@ class App extends React.Component {
           <Route exact path="/" component={Login}/>
           <Route path="/album" component={Album}/>
         </Switch>
-      <Link to='/'>
-      <button 
-        className='logout-button'
-        onClick= {() => this.logout()}
-        >
-        Logout
-      </button>
-      </Link>
+        { this.props.auth.user ? 
+              <Link to='/'>
+              <button 
+                className='logout-button'
+                onClick= {() => this.logout()}
+                >
+                Logout
+              </button>
+              </Link>
+              :
+              <div></div>
+      }
+
     </div>
     );
   }
@@ -43,4 +48,6 @@ class App extends React.Component {
 
 const mapStateToProps = reduxState => reduxState
 
-export default connect(mapStateToProps, {logoutUser, getUser})(App);
+const mapDispatchToProps = {logoutUser, getUser}  //This is where the action creators are called.
+
+export default connect(mapStateToProps, mapDispatchToProps)(App);
